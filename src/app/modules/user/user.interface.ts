@@ -1,0 +1,38 @@
+import { Model } from "mongoose";
+
+export enum UserRole {
+   ADMIN = 'admin',
+   USER = 'user',
+   MEAL = 'meal'
+
+}
+
+export interface IUser extends Document{
+   email: string;
+   password: string;
+   name: string;
+   role: UserRole;
+   hasShop:boolean;
+   clientInfo: {
+      device: 'pc' | 'mobile';
+      browser: string; 
+      ipAddress: string; 
+      pcName?: string; 
+      os?: string; 
+      userAgent?: string; 
+   };
+   lastLogin: Date;
+   isActive: boolean;
+   otpToken?: string | null;
+   createdAt: Date;
+   updatedAt: Date;
+}
+
+export interface UserModel extends Model<IUser>{
+   isPasswordMatched(
+      plainTextPassword: string,
+      hashedPassword: string,
+   ): Promise<boolean>;
+   isUserExistsByEmail(id: string):Promise<IUser>;
+   checkUserExits(userId: string) :Promise<IUser>;
+}
